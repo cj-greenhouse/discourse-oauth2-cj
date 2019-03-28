@@ -4,6 +4,7 @@ login:
     client: true
   oauth2_client_id: ''
   oauth2_client_secret: ''
+  oauth2_site: ''
   oauth2_authorize_url: ''
   oauth2_token_url: ''
   oauth2_user_json_url: ''

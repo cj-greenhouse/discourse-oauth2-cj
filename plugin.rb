@@ -27,6 +27,7 @@ class OAuth2BasicAuthenticator < ::Auth::OAuth2Authenticator
                       name: 'oauth2_basic',
                       setup: lambda { |env|
                         opts = env['omniauth.strategy'].options
+                        opts[:site] = SiteSetting.oauth2_site
                         opts[:client_id] = SiteSetting.oauth2_client_id
                         opts[:client_secret] = SiteSetting.oauth2_client_secret
                         opts[:provider_ignores_state] = false

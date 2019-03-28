@@ -3,6 +3,7 @@ en:
     oauth2_enabled: "Custom OAuth2 is enabled"
     oauth2_client_id: 'Client ID for custom OAuth2'
     oauth2_client_secret: 'Client Secret for custom OAuth2'
+    oauth2_site: 'Site providing Oauth2'
     oauth2_authorize_url: 'Authorization URL for OAuth2'
     oauth2_token_url: 'Token URL for OAuth2'
     oauth2_token_url_method: 'Method used to fetch the Token URL'
