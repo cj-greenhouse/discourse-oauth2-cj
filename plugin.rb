@@ -110,6 +110,7 @@ class OAuth2BasicAuthenticator < ::Auth::OAuth2Authenticator
 
   def after_authenticate(auth)
     log("after_authenticate response: \n\ncreds: #{auth['credentials'].to_hash}\ninfo: #{auth['info'].to_hash}\nextra: #{auth['extra'].to_hash}")
+    log("result #{auth.to_hash}")
 
     result = Auth::Result.new
     token = auth['credentials']['token']
