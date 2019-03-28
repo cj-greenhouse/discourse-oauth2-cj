@@ -19,6 +19,15 @@ class ::OmniAuth::Strategies::Oauth2Basic < ::OmniAuth::Strategies::OAuth2
   def callback_url
     Discourse.base_url_no_prefix + script_name + callback_path
   end
+
+  def callback_phase
+    oauth2_callback_phase = super
+
+    foo = oauth2_callback_phase
+    log(foo)
+
+    return foo
+  end
 end
 
 class OAuth2BasicAuthenticator < ::Auth::OAuth2Authenticator
