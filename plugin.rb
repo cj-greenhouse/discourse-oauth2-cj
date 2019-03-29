@@ -60,6 +60,7 @@ class OAuth2CJAuthenticator < ::Auth::OAuth2Authenticator
     omniauth.provider :oauth2_cj,
                       name: 'oauth2_cj',
                       setup: lambda { |env|
+      opts = env['omniauth.strategy'].options
       opts[:client_id] = SiteSetting.oauth2_client_id
       opts[:client_secret] = SiteSetting.oauth2_client_secret
       opts[:provider_ignores_state] = false
