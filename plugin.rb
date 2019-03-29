@@ -101,6 +101,7 @@ class OAuth2CJAuthenticator < ::Auth::OAuth2Authenticator
     result.email_valid = result.email.present? && SiteSetting.oauth2_email_verified?
 
     current_info = ::PluginStore.get("oauth2_cj", "oauth2_cj_user_#{auth.uid}")
+    log("current_info #{current_info.to_hash}")
     if current_info
       result.user = User.where(id: current_info[:user_id]).first
       result.user&.update!(email: result.email) if SiteSetting.oauth2_overrides_email && result.email
