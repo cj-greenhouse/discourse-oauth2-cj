@@ -49,6 +49,24 @@ class ::OmniAuth::Strategies::Oauth2CJ < ::OmniAuth::Strategies::OAuth2
     fetch_user_details(uid, access_token.token).select {|k| k != "companies"}
   end
 
+  def fetch_user_details(user_id, access_token)
+    user_json_url = URI("https://members.cj.com/affapi/oauth/user/#{user_id}")
+    puts "user json url: #{user_json_url}"
+
+    bearer_token = "Bearer #{access_token}"
+
+    req = Net::HTTP::Get.new(user_json_url)
+    req['Authorization'] = bearer_token
+
+    res = Net::HTTP.start(user_json_url.hostname, user_json_url.port, :use_ssl => true) do |http|
+      http.request(req)
+    end
+
+    puts 'user info!!!', res.body
+
+    JSON.parse res.body
+  end
+
   def callback_url
     full_host + script_name + callback_path
   end
