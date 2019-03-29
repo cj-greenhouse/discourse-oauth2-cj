@@ -6,7 +6,7 @@
 
 require_dependency 'auth/oauth2_authenticator.rb'
 
-enabled_site_setting :oauth2_enabled
+enabled_site_setting :oauth2_cj_enabled
 
 class ::OmniAuth::Strategies::Oauth2CJ < ::OmniAuth::Strategies::OAuth2
   option :name, 'oauth2_cj'
