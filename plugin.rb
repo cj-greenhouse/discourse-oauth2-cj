@@ -8,64 +8,56 @@ require_dependency 'auth/oauth2_authenticator.rb'
 
 enabled_site_setting :oauth2_enabled
 
-module OmniAuth
-  module CJ
-    VERSION = "1.3.0"
+class ::OmniAuth::Strategies::Oauth2CJ < ::OmniAuth::Strategies::OAuth2
+  option :name, 'oauth2_cj'
+  option :client_options, {
+           :site => 'https://login.cj.com',
+           :authorize_url => 'https://login.cj.com/auth',
+           :token_url => 'https://login.cj.com/token',
+         }
+
+  def build_access_token
+    options.token_params.merge!(:headers => {'Authorization' => basic_auth_header})
+    super
   end
 
-  module Strategies
-    class CJ < OmniAuth::Strategies::OAuth2
-      option :name, 'cj'
-      option :client_options, {
-               :site => 'https://login.cj.com',
-               :authorize_url => 'https://login.cj.com/auth',
-               :token_url => 'https://login.cj.com/token',
-             }
+  def basic_auth_header
+    puts options.to_hash.to_s
+    "Basic " + Base64.strict_encode64("#{options[:client_id]}:#{options[:client_secret]}")
+  end
 
-      def build_access_token
-        options.token_params.merge!(:headers => {'Authorization' => basic_auth_header})
-        super
-      end
+  def request_phase
+    super
+  end
 
-      def basic_auth_header
-        puts options.to_hash.to_s
-        "Basic " + Base64.strict_encode64("#{options[:client_id]}:#{options[:client_secret]}")
-      end
-
-      def request_phase
-        super
-      end
-
-      def authorize_params
-        super.tap do |params|
-          %w[scope client_options].each do |v|
-            if request.params[v]
-              params[v.to_sym] = request.params[v]
-            end
-          end
+  def authorize_params
+    super.tap do |params|
+      %w[scope client_options].each do |v|
+        if request.params[v]
+          params[v.to_sym] = request.params[v]
         end
-      end
-
-      uid do
-        decoded = ::JWT.decode(access_token.token, nil, false).first
-        decoded["userId"]
-      end
-
-      extra do
-        fetch_user_details(uid, access_token.token).select {|k| k != "companies"}
-      end
-
-      def callback_url
-        full_host + script_name + callback_path
       end
     end
   end
+
+  uid do
+    decoded = ::JWT.decode(access_token.token, nil, false).first
+    decoded["userId"]
+  end
+
+  extra do
+    fetch_user_details(uid, access_token.token).select {|k| k != "companies"}
+  end
+
+  def callback_url
+    full_host + script_name + callback_path
+  end
 end
-OmniAuth.config.add_camelization 'cj', 'CJ'
+OmniAuth.config.add_camelization 'oauth2_cj', 'Oauth2CJ'
 
 class OAuth2CJAuthenticator < ::Auth::OAuth2Authenticator
   def register_middleware(omniauth)
-    omniauth.provider :cj,
+    omniauth.provider :oauth2_cj,
                       name: 'oauth2_cj',
                       setup: lambda { |env|
       opts[:client_id] = SiteSetting.oauth2_client_id
