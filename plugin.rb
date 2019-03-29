@@ -95,7 +95,9 @@ class OAuth2CJAuthenticator < ::Auth::OAuth2Authenticator
 
     result = Auth::Result.new
 
-    result.email = auth['extra']['emailAddress']
+    email = auth['extra']['emailAddress']
+    result.email = email
+    result.username = email.split('@').first
     result.email_valid = result.email.present? && SiteSetting.oauth2_email_verified?
 
     current_info = ::PluginStore.get("oauth2_cj", "oauth2_cj_user_#{auth.uid}")
