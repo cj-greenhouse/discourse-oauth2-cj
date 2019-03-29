@@ -1,5 +1,5 @@
 login:
-  oauth2_enabled:
+  oauth2_cj_enabled:
     default: false
     client: true
   oauth2_client_id: ''

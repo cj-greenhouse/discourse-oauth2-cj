@@ -1,6 +1,6 @@
 en:
   js:
     login:
-      oauth2_basic:
+      oauth2_cj:
         name: "OAuth 2"
       
