@@ -117,6 +117,7 @@ class OAuth2CJAuthenticator < ::Auth::OAuth2Authenticator
   end
 
   def after_create_account(user, auth)
+    log("after_create_account:: #{auth} #{auth.to_hash}")
     ::PluginStore.set("oauth2_cj", "oauth2_cj_user_#{auth.uid}", user_id: user.id)
   end
 
